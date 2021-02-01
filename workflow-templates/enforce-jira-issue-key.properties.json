@@ -1,0 +1,5 @@
+{
+    "name": "Enforce Jira issue workflow",
+    "description": "A workflow that enforce to have a Jira issue key in the branch name or PR name when creating a PR.",
+    "iconName": "workflow-icon"
+}
