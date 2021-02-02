@@ -1,5 +1,12 @@
 name: Ensure Jira issue is linked
 
+# make sure to add the following secrets to your repository before integrating this workflow
+# the user needs to have at lease "View" permissions in your project to be able to search for issues
+# TIP_JIRA_URL - the URL of Jira that issues will be searched in
+# TIP_JIRA_USER_EMAIL - the email address of the user to authenticate with
+# TIP_JIRA_API_TOKEN - the API token to use for authentication
+# more info: https://github.com/atlassian/gajira-login#enviroment-variables
+
 on:
   pull_request:
     types: [opened, edited, reopened, synchronize]
