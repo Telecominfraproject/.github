@@ -1,0 +1,50 @@
+name: create release branches
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_number:
+        description: version number that will be used to create the branches, e.g. 2.0.0 -> release/v2.0.0
+        type: string
+        required: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  create-branches:
+    strategy:
+      fail-fast: false
+      matrix:
+        repo: 
+          - wlan-ap
+          - wlan-cloud-ucentralfms
+          - wlan-cloud-ucentralgw
+          - wlan-cloud-ucentralgw-rtty
+          - wlan-cloud-ucentralgw-ui
+          - wlan-cloud-ucentralsec
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        repository: "Telecominfraproject/${{ matrix.repo }}"
+        fetch-depth: 0
+
+    - name: configure git user
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+    - name: check if branch exists
+      id: exists
+      run: |
+        git branch -a
+        echo "::set-output name=branch::$(git ls-remote --heads origin release/v${{ github.event.inputs.version_number }})"
+
+    - name: create branch
+      if: ${{ !contains(steps.exists.outputs.branch, format('release/v{0}', github.event.inputs.version_number)) }}
+      run: |
+        git checkout -b release/v${{ github.event.inputs.version_number }}
+        #git push origin release/v${{ github.event.inputs.version_number }}
