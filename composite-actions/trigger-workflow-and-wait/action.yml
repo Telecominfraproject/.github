@@ -41,16 +41,16 @@ runs:
     - name: Execute Python script to trigger workflow run
       shell: bash
       env:
-        OWNER: ${{ github.event.inputs.owner }} 
-        REPO: ${{ github.event.inputs.repo }}
-        WORKFLOW: ${{ github.event.inputs.workflow }}
-        TOKEN: ${{ github.event.inputs.token }}
-        REF: ${{ github.event.inputs.ref }}
-        OWGW_VERSION: ${{ github.event.inputs.owgw_version }}
-        OWGWUI_VERSION: ${{ github.event.inputs.owgwui_version }}
-        OWSEC_VERSION: ${{ github.event.inputs.owsec_version }}
-        OWFMS_VERSION: ${{ github.event.inputs.owfms_version }}
-        OWPROV_VERSION: ${{ github.event.inputs.owprov_version }}
-        OWPROVUI_VERSION: ${{ github.event.inputs.owprovui_version }}
+        OWNER: ${{ inputs.owner }}
+        REPO: ${{ inputs.repo }}
+        WORKFLOW: ${{ inputs.workflow }}
+        TOKEN: ${{ inputs.token }}
+        REF: ${{ inputs.ref }}
+        OWGW_VERSION: ${{ inputs.owgw_version }}
+        OWGWUI_VERSION: ${{ inputs.owgwui_version }}
+        OWSEC_VERSION: ${{ inputs.owsec_version }}
+        OWFMS_VERSION: ${{ inputs.owfms_version }}
+        OWPROV_VERSION: ${{ inputs.owprov_version }}
+        OWPROVUI_VERSION: ${{ inputs.owprovui_version }}
       run: |
-        python github_action_dispatch_runid.py
+        python ./github/composite-actions/trigger-workflow-and-wait/github_action_dispatch_runid.py
