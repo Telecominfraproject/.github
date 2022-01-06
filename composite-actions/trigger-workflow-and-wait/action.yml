@@ -1,0 +1,59 @@
+name: Trigger workflow run and wait
+
+inputs:
+  owner:
+    description: 'Owner of the repository containing the workflow.'
+    required: true
+  repo:
+    description: 'Repository containing the workflow.'
+    required: true
+  workflow:
+    description: 'Name of the workflow which should be triggered.'
+    required: true
+  token:
+    description: 'Github access token with access to the repository.'
+    required: true
+  ref:
+    description: 'The reference of the workflow run.'
+    required: true
+  owgw_version:
+    description: 'OpenWIFI Gateway version to be deployed.'
+    required: false
+  owgwui_version:
+    description: 'OpenWIFI Web UI version to be deployed.'
+    required: false
+  owsec_version:
+    description: 'OpenWIFI Security version to be deployed.'
+    required: false
+  owfms_version:
+    description: 'OpenWIFI Firmware version to be deployed.'
+    required: false
+  owprov_version:
+    description: 'OpenWIFI Provisioning version to be deployed.'
+    required: false
+  owprovui_version:
+    description: 'OpenWIFI Provisioning Web UI version to be deployed.'
+    required: false
+
+defaults:
+  run:
+    shell: bash
+
+runs:
+  using: "composite"
+  steps:
+    - name: Execute Python script to trigger workflow run
+      env:
+        OWNER: ${{ github.event.inputs.owner }} 
+        REPO: ${{ github.event.inputs.repo }}
+        WORKFLOW: ${{ github.event.inputs.workflow }}
+        TOKEN: ${{ github.event.inputs.token }}
+        REF: ${{ github.event.inputs.ref }}
+        OWGW_VERSION: ${{ github.event.inputs.owgw_version }}
+        OWGWUI_VERSION: ${{ github.event.inputs.owgwui_version }}
+        OWSEC_VERSION: ${{ github.event.inputs.owsec_version }}
+        OWFMS_VERSION: ${{ github.event.inputs.owfms_version }}
+        OWPROV_VERSION: ${{ github.event.inputs.owprov_version }}
+        OWPROVUI_VERSION: ${{ github.event.inputs.owprovui_version }}
+      run: |
+        python github_action_dispatch_runid.py
