@@ -35,14 +35,11 @@ inputs:
     description: 'OpenWIFI Provisioning Web UI version to be deployed.'
     required: false
 
-defaults:
-  run:
-    shell: bash
-
 runs:
   using: "composite"
   steps:
     - name: Execute Python script to trigger workflow run
+      shell: bash
       env:
         OWNER: ${{ github.event.inputs.owner }} 
         REPO: ${{ github.event.inputs.repo }}
