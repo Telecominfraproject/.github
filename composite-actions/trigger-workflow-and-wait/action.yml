@@ -40,17 +40,5 @@ runs:
   steps:
     - name: Execute Python script to trigger workflow run
       shell: bash
-      env:
-        OWNER: ${{ inputs.owner }}
-        REPO: ${{ inputs.repo }}
-        WORKFLOW: ${{ inputs.workflow }}
-        TOKEN: ${{ inputs.token }}
-        REF: ${{ inputs.ref }}
-        OWGW_VERSION: ${{ inputs.owgw_version }}
-        OWGWUI_VERSION: ${{ inputs.owgwui_version }}
-        OWSEC_VERSION: ${{ inputs.owsec_version }}
-        OWFMS_VERSION: ${{ inputs.owfms_version }}
-        OWPROV_VERSION: ${{ inputs.owprov_version }}
-        OWPROVUI_VERSION: ${{ inputs.owprovui_version }}
       run: |
-        python ./github/composite-actions/trigger-workflow-and-wait/github_action_dispatch_runid.py
+        python ${{ github.action_path }}/github_action_dispatch_runid.py --owner ${{ inputs.owner }} --repo ${{ inputs.repo }} --workflow ${{ inputs.workflow }} --token ${{ inputs.token }} --ref ${{ inputs.ref }} --owgw_version ${{ inputs.owgw_version || 'master' }} --owgwui_version ${{ inputs.owgwui_version || 'main' }} --owsec_version ${{ inputs.owsec_version || 'main' }} --owfms_version ${{ inputs.owfms_version || 'main' }} --owprov_version {{ inputs.owprov_version || 'main' }} --owprovui_version ${{ inputs.owprovui_version || 'main' }}
