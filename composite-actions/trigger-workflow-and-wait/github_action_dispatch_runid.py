@@ -1,5 +1,6 @@
 import random
 import os
+import json
 import sys
 import argparse
 import string
@@ -19,20 +20,18 @@ def trigger_workflow_and_get_id():
 
     authHeader = {"Authorization": f"Token {args.token}"}
 
+    id_dict = {"id": run_identifier}
+    if args.inputs:
+        inputs_dict = json.loads(args.inputs)
+    else:
+        inputs_dict = {}
+
     r = requests.post(
         f"https://api.github.com/repos/{args.owner}/{args.repo}/actions/workflows/{args.workflow}/dispatches",
         headers=authHeader,
         json={
             "ref": args.ref,
-            "inputs": {
-                "id": run_identifier,
-                "owgw_version": args.owgw_version,
-                "owgwui_version": args.owgwui_version,
-                "owsec_version": args.owsec_version,
-                "owfms_version": args.owfms_version,
-                "owprov_version": args.owprov_version,
-                "owprovui_version": args.owprovui_version,
-            }
+            "inputs": id_dict | inputs_dict
         })
 
     print(
@@ -112,12 +111,7 @@ if __name__ == '__main__':
     parser.add_argument('--workflow')
     parser.add_argument('--token')
     parser.add_argument('--ref')
-    parser.add_argument('--owgw_version', default='master')
-    parser.add_argument('--owgwui_version', default='main')
-    parser.add_argument('--owsec_version', default='main')
-    parser.add_argument('--owfms_version', default='main')
-    parser.add_argument('--owprov_version', default='main')
-    parser.add_argument('--owprovui_version', default='main')
+    parser.add_argument('--inputs')
     args = parser.parse_args()
 
     main()
