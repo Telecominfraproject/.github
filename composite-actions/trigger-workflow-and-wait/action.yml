@@ -16,23 +16,8 @@ inputs:
   ref:
     description: 'The reference of the workflow run.'
     required: true
-  owgw_version:
-    description: 'OpenWIFI Gateway version to be deployed.'
-    required: false
-  owgwui_version:
-    description: 'OpenWIFI Web UI version to be deployed.'
-    required: false
-  owsec_version:
-    description: 'OpenWIFI Security version to be deployed.'
-    required: false
-  owfms_version:
-    description: 'OpenWIFI Firmware version to be deployed.'
-    required: false
-  owprov_version:
-    description: 'OpenWIFI Provisioning version to be deployed.'
-    required: false
-  owprovui_version:
-    description: 'OpenWIFI Provisioning Web UI version to be deployed.'
+  inputs:
+    description: 'Inputs to pass to the workflow, has to be a JSON string'
     required: false
 
 runs:
@@ -41,4 +26,4 @@ runs:
     - name: Execute Python script to trigger workflow run
       shell: bash
       run: |
-        python ${{ github.action_path }}/github_action_dispatch_runid.py --owner ${{ inputs.owner }} --repo ${{ inputs.repo }} --workflow ${{ inputs.workflow }} --token ${{ inputs.token }} --ref ${{ inputs.ref }} --owgw_version ${{ inputs.owgw_version || 'master' }} --owgwui_version ${{ inputs.owgwui_version || 'main' }} --owsec_version ${{ inputs.owsec_version || 'main' }} --owfms_version ${{ inputs.owfms_version || 'main' }} --owprov_version ${{ inputs.owprov_version || 'main' }} --owprovui_version ${{ inputs.owprovui_version || 'main' }}
+        python ${{ github.action_path }}/github_action_dispatch_runid.py --owner ${{ inputs.owner }} --repo ${{ inputs.repo }} --workflow ${{ inputs.workflow }} --token ${{ inputs.token }} --ref ${{ inputs.ref }} --inputs {{ inputs.inputs || '{}' }} 
