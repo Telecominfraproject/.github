@@ -26,4 +26,4 @@ runs:
     - name: Execute Python script to trigger workflow run
       shell: bash
       run: |
-        python ${{ github.action_path }}/github_action_dispatch_runid.py --owner ${{ inputs.owner }} --repo ${{ inputs.repo }} --workflow ${{ inputs.workflow }} --token ${{ inputs.token }} --ref ${{ inputs.ref }} --inputs "${{ inputs.inputs || '{}' }}"
+        python ${{ github.action_path }}/github_action_dispatch_runid.py --owner ${{ inputs.owner }} --repo ${{ inputs.repo }} --workflow ${{ inputs.workflow }} --token ${{ inputs.token }} --ref ${{ inputs.ref }} --inputs '${{ inputs.inputs || '{}' }}'
