@@ -31,7 +31,7 @@ def trigger_workflow_and_get_id():
         headers=authHeader,
         json={
             "ref": args.ref,
-            "inputs": id_dict | inputs_dict
+            "inputs": {**id_dict, **inputs_dict}
         })
 
     print(
