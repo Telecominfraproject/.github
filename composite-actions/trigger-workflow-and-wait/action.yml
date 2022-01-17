@@ -1,0 +1,29 @@
+name: Trigger workflow run and wait
+
+inputs:
+  owner:
+    description: 'Owner of the repository containing the workflow.'
+    required: true
+  repo:
+    description: 'Repository containing the workflow.'
+    required: true
+  workflow:
+    description: 'Name of the workflow which should be triggered.'
+    required: true
+  token:
+    description: 'Github access token with access to the repository.'
+    required: true
+  ref:
+    description: 'The reference of the workflow run.'
+    required: true
+  inputs:
+    description: 'Inputs to pass to the workflow, has to be a JSON string'
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Execute Python script to trigger workflow run
+      shell: bash
+      run: |
+        python ${{ github.action_path }}/github_action_dispatch_runid.py --owner ${{ inputs.owner }} --repo ${{ inputs.repo }} --workflow ${{ inputs.workflow }} --token ${{ inputs.token }} --ref ${{ inputs.ref }} --inputs '${{ inputs.inputs || '{}' }}'
