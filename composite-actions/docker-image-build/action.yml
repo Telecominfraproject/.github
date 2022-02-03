@@ -2,6 +2,9 @@ name: Build and push microservice Docker image
 description: Build image using BuildKit and Github cache 
 
 inputs:
+  image_name:
+    description: Name of the image you want to build
+    required: true
   registry:
     description: the registry to push to
     required: true
