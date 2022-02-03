@@ -1,0 +1,59 @@
+name: Build and push microservice Docker image
+description: Build image using BuildKit and Github cache 
+
+inputs:
+  registry:
+    description: the registry to push to
+    required: true
+  registry_user:
+    description: the user to authenticate against the registry
+    required: true
+  registry_password:
+    description: the password to authenticate against the registry
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - uses: actions/checkout@v2
+
+  - name: Set up Docker Buildx
+    id: buildx
+    uses: docker/setup-buildx-action@v1
+    with:
+      install: true
+
+  - name: Log into Docker registry
+    if: startsWith(github.ref, 'refs/tags/') || startsWith(github.ref, 'refs/pull/') || github.ref == 'refs/heads/master'
+    uses: docker/login-action@v1
+    with:
+      registry: ${{ inputs.registry }}
+      username: ${{ inputs.registry_user }}
+      password: ${{ inputs.registry_password }}
+
+  - name: Set branch name output
+    id: set_branch_name
+    run: |
+      if [[ ${GITHUB_REF} == "refs/heads/"* ]]
+      then
+        echo ::set-output name=branch_name::$(echo ${GITHUB_REF#refs/heads/} | tr '/' '-')
+      else
+        if [[ ${GITHUB_REF} == "refs/tags/"* ]]
+        then
+          echo ::set-output name=branch_name::$(echo ${GITHUB_REF#refs/tags/} | tr '/' '-')
+        else # PR build
+          echo ::set-output name=branch_name::$(echo ${GITHUB_HEAD_REF#refs/heads/} | tr '/' '-')
+        fi
+      fi
+
+  - name: Build and push
+    if: startsWith(github.ref, 'refs/tags/') || startsWith(github.ref, 'refs/pull/') || github.ref == 'refs/heads/master'
+    uses: docker/build-push-action@v2
+    env:
+      BRANCH_NAME: ${{ steps.set_branch_name.outputs.branch_name }}
+    with:
+      context: .
+      push: true
+      tags: ${{ inputs.registry }}/${{ inputs.image_name }}:${{ github.sha }},${{ inputs.registry }}/${{ inputs.image_name }}:${{ env.BRANCH_NAME }}
+      cache-from: type=gha
+      cache-to: type=gha,mode=max
