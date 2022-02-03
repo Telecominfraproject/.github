@@ -32,6 +32,7 @@ runs:
       password: ${{ inputs.registry_password }}
 
   - name: Set branch name output
+    shell: bash
     id: set_branch_name
     run: |
       if [[ ${GITHUB_REF} == "refs/heads/"* ]]
