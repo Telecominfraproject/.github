@@ -19,6 +19,7 @@ runs:
   using: "composite"
   steps:
   - uses: actions/checkout@v2
+    clean: 'false'
 
   - name: Set up Docker Buildx
     id: buildx
