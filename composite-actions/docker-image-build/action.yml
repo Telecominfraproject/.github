@@ -20,7 +20,7 @@ runs:
   steps:
   - uses: actions/checkout@v2
     with:
-      clean: 'false'
+      path: docker-image-build  
 
   - name: Set up Docker Buildx
     id: buildx
@@ -58,7 +58,7 @@ runs:
     env:
       BRANCH_NAME: ${{ steps.set_branch_name.outputs.branch_name }}
     with:
-      context: .
+      context: ./docker-image-build
       push: true
       tags: ${{ inputs.registry }}/${{ inputs.image_name }}:${{ github.sha }},${{ inputs.registry }}/${{ inputs.image_name }}:${{ env.BRANCH_NAME }}
       cache-from: type=gha
