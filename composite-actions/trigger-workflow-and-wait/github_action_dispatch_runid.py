@@ -13,10 +13,6 @@ def trigger_workflow_and_get_id():
     # generate a random id
     run_identifier = ''.join(random.choices(
         string.ascii_uppercase + string.digits, k=15))
-    # filter runs that were created after this date minus 5 minutes
-    delta_time = datetime.timedelta(minutes=5)
-    run_date_filter = (datetime.datetime.utcnow() -
-                       delta_time).strftime("%Y-%m-%dT%H:%M")
 
     authHeader = {"Authorization": f"Token {args.token}"}
 
@@ -41,7 +37,7 @@ def trigger_workflow_and_get_id():
     while workflow_id == "":
 
         r = requests.get(
-            f"https://api.github.com/repos/{args.owner}/{args.repo}/actions/runs?created=%3E{run_date_filter}",
+            f"https://api.github.com/repos/{args.owner}/{args.repo}/actions/workflows/{args.workflow}/runs?per_page=10",
             headers=authHeader)
         runs = r.json()["workflow_runs"]
 
