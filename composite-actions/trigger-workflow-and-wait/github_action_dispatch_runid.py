@@ -87,13 +87,14 @@ def wait_for_workflow():
     conclusion = r.json()["conclusion"]
 
     if conclusion == "success":
-        print(f"Workflow with ID {workflow_id} completed successfully.")
+        print(f"Workflow with ID {workflow_id} completed successfully. "
+              f"You can check the workflow logs at https://github.com/{args.owner}/{args.repo}/actions/runs/{workflow_id}")
         sys.exit(0)
     else:
         print(
             f"Workflow with ID {workflow_id} failed or has been canceled, "
             "please check the logs at "
-            f"https://github.com/{args.owner}/{args.repo}/actions/runs/{workflow_id}.")
+            f"https://github.com/{args.owner}/{args.repo}/actions/runs/{workflow_id}")
         sys.exit(1)
 
 
