@@ -14,12 +14,16 @@ inputs:
   registry_password:
     description: the password to authenticate against the registry
     required: true
+  checkout_fetch_depth:
+    description: sets "fetch-depth" in "actions/checkout"
+    default: 1
 
 runs:
   using: "composite"
   steps:
   - uses: actions/checkout@v2
     with:
+      fetch-depth: ${{ inputs.checkout_fetch_depth }}
       path: docker-image-build  
 
   - name: Set up Docker Buildx
