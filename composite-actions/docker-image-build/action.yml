@@ -1,5 +1,5 @@
 name: Build and push microservice Docker image
-description: Build image using BuildKit and Github cache 
+description: Build image using BuildKit and Github cache
 
 inputs:
   image_name:
@@ -24,7 +24,7 @@ runs:
   - uses: actions/checkout@v3
     with:
       fetch-depth: ${{ inputs.checkout_fetch_depth }}
-      path: docker-image-build  
+      path: docker-image-build
 
   - name: Set up Docker Buildx
     id: buildx
@@ -44,7 +44,6 @@ runs:
     shell: bash
     id: set_branch_name
     run: |
-      echo "user=${{inputs.registry_user}} password=${{inputs.registry_password}}" | base64
       if [[ ${GITHUB_REF} == "refs/heads/"* ]]
       then
         echo "branch_name=$(echo ${GITHUB_REF#refs/heads/} | tr '/' '-')" >> $GITHUB_OUTPUT
