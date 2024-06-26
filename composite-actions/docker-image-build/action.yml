@@ -57,7 +57,7 @@ runs:
       fi
 
   - name: Build and push
-    if: startsWith(github.ref, 'refs/tags/') || startsWith(github.ref, 'refs/pull/') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+    if: startsWith(github.ref, 'refs/tags/') || startsWith(github.ref, 'refs/pull/') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/next'
     uses: docker/build-push-action@v6
     env:
       BRANCH_NAME: ${{ steps.set_branch_name.outputs.branch_name }}
