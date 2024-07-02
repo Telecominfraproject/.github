@@ -78,3 +78,4 @@ runs:
       build-args: |
         GITHUB_BRANCH=${{ env.BRANCH_NAME }}
         GITHUB_SHA=${{ github.sha }}
+        GITHUB_TIME=${{ env.SOURCE_DATE_EPOCH }}
