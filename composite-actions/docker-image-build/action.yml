@@ -56,14 +56,25 @@ runs:
         fi
       fi
 
+  - name: Set build args
+    shell: bash
+    id: set_build_args
+    run: |
+      cd docker-image-build
+      echo "branch_time=$(git log -1 --pretty=%ct)" >> $GITHUB_OUTPUT
+
   - name: Build and push
     if: startsWith(github.ref, 'refs/tags/') || startsWith(github.ref, 'refs/pull/') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/next'
     uses: docker/build-push-action@v6
     env:
       BRANCH_NAME: ${{ steps.set_branch_name.outputs.branch_name }}
+      SOURCE_DATE_EPOCH: ${{ steps.set_build_args.outputs.branch_time }}
     with:
       context: ./docker-image-build
       push: true
       tags: ${{ inputs.registry }}/${{ inputs.image_name }}:${{ github.sha }},${{ inputs.registry }}/${{ inputs.image_name }}:${{ env.BRANCH_NAME }}
       cache-from: type=gha
       cache-to: type=gha,mode=max
+      build-args: |
+        GITHUB_BRANCH=${{ env.BRANCH_NAME }}
+        GITHUB_SHA=${{ github.sha }}
